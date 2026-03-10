@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Impostor Familiar</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <h1>Impostor Familiar</h1>
+      <p>Prototipo local para jugar en un solo celular</p>
+    </header>
+
+    <section id="setup-screen" class="screen active">
+      <div class="card">
+        <h2>Jugadores</h2>
+        <p class="muted">Agrega al menos 3 jugadores para empezar.</p>
+        <form id="player-form" class="row">
+          <input id="player-input" type="text" maxlength="24" placeholder="Nombre del jugador">
+          <button type="submit" class="primary">Agregar</button>
+        </form>
+        <ul id="players-list" class="players-list"></ul>
+      </div>
+
+      <div class="card">
+        <h2>Partida</h2>
+        <label for="duration-select" class="label">Tiempo de juego</label>
+        <select id="duration-select">
+          <option value="3">3 minutos</option>
+          <option value="5" selected>5 minutos</option>
+          <option value="10">10 minutos</option>
+        </select>
+        <p id="dictionary-status" class="muted">Cargando palabras...</p>
+        <div id="dictionary-tools" class="dictionary-tools hidden">
+          <input id="dictionary-file" type="file" accept=".txt,text/plain" class="hidden">
+          <button id="dictionary-button" type="button" class="secondary full">Seleccionar palabras.txt</button>
+        </div>
+        <button id="start-button" class="primary full" disabled>Iniciar partida</button>
+      </div>
+    </section>
+
+    <section id="pass-screen" class="screen">
+      <div class="card center">
+        <h2>Revela tu rol</h2>
+        <p class="muted">Pasa el celular a:</p>
+        <p id="pass-player" class="player-highlight"></p>
+        <p id="pass-progress" class="pill"></p>
+        <p class="warning">No miren los demas.</p>
+        <button id="show-role-button" class="primary full">Ver mi rol</button>
+      </div>
+    </section>
+
+    <section id="role-screen" class="screen">
+      <div class="card center">
+        <p id="role-player" class="player-title"></p>
+        <div id="role-card" class="role-card citizen">
+          <p class="role-label">Tu rol</p>
+          <p id="role-name" class="role-name"></p>
+          <p id="word-label" class="role-label">Tu palabra</p>
+          <p id="secret-word" class="secret-word"></p>
+          <p id="impostor-hint" class="impostor-hint hidden">Sos el impostor. Disimula y descubri la palabra.</p>
+        </div>
+        <button id="understood-button" class="primary">Entendido</button>
+      </div>
+    </section>
+
+    <section id="timer-screen" class="screen">
+      <div class="card center">
+        <h2 id="timer-display" class="timer-display">05:00</h2>
+        <p class="muted">Partida en curso</p>
+        <div class="actions">
+          <button id="pause-button" class="secondary">Pausar</button>
+          <button id="finish-button" class="danger">Terminar</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="end-screen" class="screen">
+      <div class="card center">
+        <h2>Juego terminado</h2>
+        <p id="end-summary" class="muted"></p>
+        <button id="play-again-button" class="primary">Jugar de nuevo</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js" defer></script>
+</body>
+</html>

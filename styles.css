@@ -1,0 +1,272 @@
+:root {
+  --bg: #0b0f1f;
+  --bg-soft: #11172b;
+  --card: #161f3a;
+  --text: #eff3ff;
+  --muted: #a3b2d8;
+  --accent: #3d7dff;
+  --accent-2: #4b4bff;
+  --ok: #1cbf74;
+  --danger: #db3d4f;
+  --warning: #ffd166;
+  --border: #2a365f;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 10% 10%, #28367a 0%, transparent 40%),
+    radial-gradient(circle at 90% 5%, #3f1d66 0%, transparent 35%),
+    linear-gradient(165deg, #090d1a 0%, #0a1130 45%, #1d1144 100%);
+}
+
+.app {
+  width: min(760px, 100%);
+  margin: 0 auto;
+  padding: 20px 14px 24px;
+}
+
+.topbar {
+  margin-bottom: 14px;
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+}
+
+.topbar p {
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+
+.screen {
+  display: none;
+  gap: 14px;
+  flex-direction: column;
+}
+
+.screen.active {
+  display: flex;
+}
+
+.card {
+  background: linear-gradient(160deg, rgba(20, 30, 58, 0.96), rgba(17, 21, 45, 0.96));
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+.card h2 {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.center {
+  text-align: center;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.warning {
+  color: var(--warning);
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+input,
+select,
+button {
+  font: inherit;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+input,
+select {
+  width: 100%;
+  padding: 11px 12px;
+  color: var(--text);
+  background: var(--bg-soft);
+}
+
+input:focus,
+select:focus,
+button:focus {
+  outline: 2px solid rgba(61, 125, 255, 0.45);
+  outline-offset: 1px;
+}
+
+button {
+  cursor: pointer;
+  padding: 10px 16px;
+  color: var(--text);
+  background: var(--bg-soft);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.primary {
+  border: none;
+  background: linear-gradient(120deg, var(--accent-2), var(--accent));
+  font-weight: 700;
+}
+
+.secondary {
+  border: none;
+  background: #33415f;
+}
+
+.danger {
+  border: none;
+  background: var(--danger);
+}
+
+.full {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.dictionary-tools {
+  margin-top: 8px;
+}
+
+.label {
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.players-list {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.players-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.players-list button {
+  border: none;
+  padding: 6px 10px;
+  background: rgba(219, 61, 79, 0.22);
+  color: #ff8f9c;
+}
+
+.player-highlight,
+.player-title {
+  margin: 6px 0 8px;
+  font-size: clamp(1.8rem, 7vw, 2.8rem);
+  font-weight: 800;
+}
+
+.pill {
+  display: inline-block;
+  margin: 0 0 12px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(61, 125, 255, 0.16);
+}
+
+.role-card {
+  margin: 8px 0 14px;
+  border-radius: 14px;
+  padding: 18px;
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.role-card.citizen {
+  background: linear-gradient(160deg, rgba(20, 70, 54, 0.48), rgba(9, 36, 41, 0.45));
+  border-color: rgba(62, 208, 144, 0.65);
+}
+
+.role-card.impostor {
+  background: linear-gradient(160deg, rgba(97, 22, 35, 0.63), rgba(56, 13, 30, 0.58));
+  border-color: rgba(255, 110, 130, 0.75);
+}
+
+.role-label {
+  margin: 0;
+  color: #cfdbff;
+}
+
+.role-name {
+  margin: 8px 0 18px;
+  font-size: clamp(1.8rem, 6vw, 2.6rem);
+  font-weight: 900;
+}
+
+.secret-word {
+  margin: 8px auto 0;
+  max-width: 320px;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: clamp(1.5rem, 5.5vw, 2.2rem);
+  font-weight: 800;
+  background: rgba(3, 16, 27, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.impostor-hint {
+  margin: 8px auto 0;
+  max-width: 360px;
+  padding: 12px;
+  border-radius: 10px;
+  background: rgba(27, 9, 15, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  font-size: 1.15rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.timer-display {
+  margin: 0;
+  font-size: clamp(2.4rem, 14vw, 5rem);
+  letter-spacing: 0.06em;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+@media (max-width: 500px) {
+  .row {
+    flex-direction: column;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+}
