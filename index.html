@@ -15,7 +15,10 @@
 
     <section id="setup-screen" class="screen active">
       <div class="card">
-        <h2>Jugadores</h2>
+        <div class="card-header">
+          <h2>Jugadores</h2>
+          <button id="add-malisanis-button" type="button" class="subtle">AGREGAR MALISANIS</button>
+        </div>
         <p class="muted">Agrega al menos 3 jugadores para empezar.</p>
         <form id="player-form" class="row">
           <input id="player-input" type="text" maxlength="24" placeholder="Nombre del jugador">
@@ -26,6 +29,10 @@
 
       <div class="card">
         <h2>Partida</h2>
+        <label for="category-select" class="label">Tema de palabras</label>
+        <select id="category-select">
+          <option value="aleatorio">Aleatorio</option>
+        </select>
         <label for="duration-select" class="label">Tiempo de juego</label>
         <select id="duration-select">
           <option value="3">3 minutos</option>
@@ -35,7 +42,7 @@
         <p id="dictionary-status" class="muted">Cargando palabras...</p>
         <div id="dictionary-tools" class="dictionary-tools hidden">
           <input id="dictionary-file" type="file" accept=".txt,text/plain" class="hidden">
-          <button id="dictionary-button" type="button" class="secondary full">Seleccionar palabras.txt</button>
+          <button id="dictionary-button" type="button" class="secondary full">Seleccionar diccionario</button>
         </div>
         <button id="start-button" class="primary full" disabled>Iniciar partida</button>
       </div>

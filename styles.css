@@ -70,6 +70,17 @@ body {
   margin-bottom: 8px;
 }
 
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.card-header h2 {
+  margin-bottom: 0;
+}
+
 .center {
   text-align: center;
 }
@@ -144,6 +155,16 @@ button:disabled {
   margin-top: 12px;
 }
 
+.subtle {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: #b8c7ee;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  padding: 7px 10px;
+  white-space: nowrap;
+}
+
 .dictionary-tools {
   margin-top: 8px;
 }
@@ -151,6 +172,10 @@ button:disabled {
 .label {
   display: inline-block;
   margin-bottom: 8px;
+}
+
+select + .label {
+  margin-top: 12px;
 }
 
 .players-list {
@@ -264,6 +289,11 @@ button:disabled {
 @media (max-width: 500px) {
   .row {
     flex-direction: column;
+  }
+
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .actions {

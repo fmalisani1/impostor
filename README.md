@@ -5,16 +5,34 @@ Prototipo del juego tipo "Impostor" para jugar en un solo celular, con tema oscu
 ## Como usar
 
 1. Agrega jugadores (minimo 3).
-2. Elige duracion.
-3. Inicia partida.
-4. Pasa el celular y cada jugador revela su rol.
-5. Al final empieza el temporizador.
-6. Cuando termina, puedes jugar de nuevo.
+2. Si quieres, usa el boton `AGREGAR MALISANIS` para cargar: Fede, Clari, Marta, Norbert, Dani y Romi.
+3. Elige duracion.
+4. Elige el tema de palabras (o `Aleatorio`).
+5. Inicia partida.
+6. Pasa el celular y cada jugador revela su rol.
+7. Al final empieza el temporizador.
+8. Cuando termina, puedes jugar de nuevo.
 
 ## Diccionario
 
-El archivo `palabras.txt` se usa como diccionario.
-Cada palabra o frase va en una linea distinta.
+El archivo `diccionario.txt` se usa como diccionario principal.
+
+Formato recomendado (facil de editar):
+
+```text
+[Nombre de categoria]
+Palabra 1
+Palabra 2
+Palabra 3
+
+[Otra categoria]
+Palabra 1
+Palabra 2
+```
+
+Notas:
+- `Aleatorio` toma una categoria al azar.
+- Se usa vocabulario en espanol rioplatense/argentino y apto para chicos.
 
 ## Ejecutar local en Chrome
 
@@ -22,10 +40,10 @@ Opciones:
 
 1) Sin servidor (abrir `index.html` directo):
 - Funciona igual y usa diccionario integrado de respaldo.
-- Si quieres usar tu propio `palabras.txt`, usa el boton "Seleccionar palabras.txt".
+- Si quieres usar tu propio diccionario, usa el boton "Seleccionar diccionario".
 - El diccionario elegido se guarda en cache local del navegador.
 
-2) Con servidor local (recomendado para tomar `palabras.txt` automaticamente):
+2) Con servidor local (recomendado para tomar `diccionario.txt` automaticamente):
 
 ```bash
 python -m http.server 5500
