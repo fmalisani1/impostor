@@ -153,3 +153,210 @@ Koala
 Oso
 Panda
 Gallo
+
+[Frutas]
+Banana
+Manzana
+Naranja
+Mandarina
+Pera
+Frutilla
+Uva
+Sandia
+Melon
+Durazno
+Ciruelas
+Kiwi
+Anana
+Limon
+Lima
+Pomelo
+Arándano
+Frambuesa
+Mora
+Cereza
+Higo
+Pelón
+Damasco
+Nectarina
+Mango
+Papaya
+Caqui
+Nueces
+Almendras
+Coco
+
+[Verduras]
+Lechuga
+Tomate
+Zanahoria
+Papa
+Cebolla
+Ajo
+Choclo
+Arveja
+Zanahoria
+Brocoli
+Coliflor
+Repollo
+Espinaca
+Acelga
+Remolacha
+Zapallo
+Calabaza
+Berenjenas
+Pimiento
+Choclo
+Poroto
+Lentejas
+Champignon
+Apio
+Puerro
+Radicheta
+Tomate cherry
+Pepino
+Berenjena
+Rabanito
+
+[Deportes]
+Futbol
+Basquet
+Tenis
+Voley
+Handball
+Hockey
+Atletismo
+Natacion
+Ciclismo
+Skateboard
+Patinaje
+Gimnasia
+Judo
+Karate
+Boxeo
+Escrime
+Esqui
+Snowboard
+Windsurf
+Surf
+Rugby
+Polo
+Golf
+Ping pong
+Badminton
+Beisbol
+Softbol
+Parkour
+Escalada
+Alpinismo
+
+[Medios de Transporte]
+Auto
+Colectivo
+Taxi
+Bicicleta
+Moto
+Camion
+Tren
+Avion
+Helicoptero
+Barco
+Velero
+Crucero
+Subte
+Tranvia
+Carreta
+Carruaje
+Canoa
+Kayak
+Bote
+Teleférico
+Ascensor
+Escalera mecanica
+Patineta
+Patines
+Carrito de compras
+
+[Vehiculos]
+Auto
+Camion
+Moto
+Bicicleta
+Colectivo
+Taxi
+Ambulancia
+Patrullero
+Camioneta
+Pickup
+Tren
+Vagón
+Avion
+Helicoptero
+Barco
+Lancha
+Canoa
+Kayak
+
+[Ropa]
+Remera
+Buzo
+Campera
+Jean
+Short
+Pantalon
+Falda
+Vestido
+Pollera
+Chomba
+Camisa
+Saco
+Corbata
+Bufanda
+Gorro
+Gafas de sol
+Medias
+Zapatillas
+Zapatos
+Sandalias
+Chinelas
+Cinturon
+Guantes
+Chaleco
+Abrigo
+Impermeable
+Uniforme
+Pijama
+Sweater
+Cartera
+
+[Personajes Famosos]
+Mario Bros
+Mickey Mouse
+Minnie Mouse
+Pato Donald
+Bugs Bunny
+Bob Esponja
+Dora la Exploradora
+Elmo
+Winnie Pooh
+Pocoyo
+Shrek
+Frozen Elsa
+Frozen Anna
+Rapunzel
+Blancanieves
+La Cenicienta
+Aladino
+Simba
+Woody
+Buzz Lightyear
+Nemo
+Dory
+Vaiana
+Moana
+Aladino
+Lightning McQueen
+Rayo McQueen
+Toy Story
+La Reina de Hielo
+Cristales de Hielo
