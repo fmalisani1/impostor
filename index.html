@@ -25,6 +25,7 @@
           <button type="submit" class="primary">Agregar</button>
         </form>
         <ul id="players-list" class="players-list"></ul>
+        <p class="muted players-help">Arrastra cada jugador para cambiar el orden.</p>
       </div>
 
       <div class="card">
@@ -40,6 +41,7 @@
           <option value="10">10 minutos</option>
         </select>
         <p id="dictionary-status" class="muted">Cargando palabras...</p>
+        <p id="session-word-status" class="muted"></p>
         <div id="dictionary-tools" class="dictionary-tools hidden">
           <input id="dictionary-file" type="file" accept=".txt,text/plain" class="hidden">
           <button id="dictionary-button" type="button" class="secondary full">Seleccionar diccionario</button>
@@ -91,6 +93,10 @@
         <button id="play-again-button" class="primary">Jugar de nuevo</button>
       </div>
     </section>
+
+    <button id="preview-random-button" type="button" class="secondary full debug-preview-button">
+      Probar random temporal
+    </button>
   </main>
 
   <script src="app.js" defer></script>

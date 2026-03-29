@@ -196,11 +196,66 @@ select + .label {
   border: 1px solid rgba(255, 255, 255, 0.09);
 }
 
-.players-list button {
+.players-help,
+#session-word-status {
+  margin: 10px 0 0;
+}
+
+.player-item {
+  gap: 10px;
+}
+
+.player-name {
+  flex: 1;
+  min-width: 0;
+}
+
+.player-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.drag-handle {
+  border: 1px dashed rgba(184, 199, 238, 0.34);
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #cfe0ff;
+  cursor: grab;
+  touch-action: none;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.remove-player-button {
   border: none;
   padding: 6px 10px;
   background: rgba(219, 61, 79, 0.22);
   color: #ff8f9c;
+}
+
+.drag-placeholder {
+  list-style: none;
+  border-radius: 10px;
+  background: rgba(61, 125, 255, 0.12);
+  border: 1px dashed rgba(61, 125, 255, 0.62);
+}
+
+.player-item.dragging {
+  position: fixed;
+  z-index: 30;
+  margin: 0;
+  pointer-events: none;
+  opacity: 0.96;
+  box-shadow: 0 18px 32px rgba(0, 0, 0, 0.34);
+}
+
+.dragging-players,
+.dragging-players * {
+  user-select: none;
 }
 
 .player-highlight,
@@ -286,6 +341,13 @@ select + .label {
   margin-top: 12px;
 }
 
+.debug-preview-button {
+  margin-top: 18px;
+  min-height: 54px;
+  white-space: normal;
+  word-break: break-word;
+}
+
 @media (max-width: 500px) {
   .row {
     flex-direction: column;
@@ -298,5 +360,15 @@ select + .label {
 
   .actions {
     flex-direction: column;
+  }
+
+  .player-item {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .player-actions {
+    width: 100%;
+    justify-content: space-between;
   }
 }

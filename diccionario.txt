@@ -121,7 +121,7 @@ Ganso
 Abeja
 Mariposa
 Hormiga
-Arana
+Araña
 Rana
 Sapo
 Pez
@@ -155,13 +155,6 @@ Panda
 Gallo
 
 [Frutas]
-Banana
-Manzana
-Naranja
-Mandarina
-Pera
-Frutilla
-Uva
 Sandia
 Melon
 Durazno
@@ -178,7 +171,6 @@ Cereza
 Higo
 Pelón
 Damasco
-Nectarina
 Mango
 Papaya
 Caqui
@@ -187,15 +179,11 @@ Almendras
 Coco
 
 [Verduras]
-Lechuga
-Tomate
-Zanahoria
 Papa
 Cebolla
 Ajo
 Choclo
 Arveja
-Zanahoria
 Brocoli
 Coliflor
 Repollo
@@ -206,9 +194,7 @@ Zapallo
 Calabaza
 Berenjenas
 Pimiento
-Choclo
 Poroto
-Lentejas
 Champignon
 Apio
 Puerro
@@ -234,7 +220,6 @@ Gimnasia
 Judo
 Karate
 Boxeo
-Escrime
 Esqui
 Snowboard
 Windsurf
@@ -254,7 +239,6 @@ Alpinismo
 Auto
 Colectivo
 Taxi
-Bicicleta
 Moto
 Camion
 Tren
@@ -278,31 +262,14 @@ Patines
 Carrito de compras
 
 [Vehiculos]
-Auto
-Camion
-Moto
-Bicicleta
-Colectivo
-Taxi
 Ambulancia
 Patrullero
 Camioneta
 Pickup
-Tren
 Vagón
-Avion
-Helicoptero
-Barco
 Lancha
-Canoa
-Kayak
 
 [Ropa]
-Remera
-Buzo
-Campera
-Jean
-Short
 Pantalon
 Falda
 Vestido
@@ -314,8 +281,6 @@ Corbata
 Bufanda
 Gorro
 Gafas de sol
-Medias
-Zapatillas
 Zapatos
 Sandalias
 Chinelas
@@ -341,22 +306,71 @@ Elmo
 Winnie Pooh
 Pocoyo
 Shrek
-Frozen Elsa
-Frozen Anna
 Rapunzel
 Blancanieves
-La Cenicielta
+La Cenicienta
 Aladino
 Simba
 Woody
 Buzz Lightyear
 Nemo
 Dory
-Vaiana
 Moana
-Aladino
 Lightning McQueen
 Rayo McQueen
+Harry Potter
+Terminator
+Doc Brown
+Marty McFly
+Peppa Pig
+Homero Simpson
+Bart Simpson
+
+[Random]
+Cachirla
+Momia
+Sorete
+Culo
+Convencion
+Channel
+Inodoro
+Videt
+Impresora
+Peteta
+Petete
+
+[Peliculas super conocidas]
+Volver al futuro
+El Rey Leon
+Lilo & Stich
+Querida encogí a los niños
+La bella y la bestia
 Toy Story
-La Reina de Hielo
-Cristales de Hielo
+Frozen
+Mi pobre angelito
+E.T.
+Bambi
+Buscando a Nemo
+Peter Pan
+Mary Poppins
+El mago de Oz
+Jurassic Park
+Matilda
+Los Increibles
+Monsters, Inc.
+La sirenita
+Intensamente
+Pinocho
+Dumbo
+Blancanieves y los siete enanitos
+El libro de la selva
+Harry Potter y la piedra filosofal
+
+[Lugares conocidos]
+Unicenter
+Mar del Sur
+Mar del Plata
+Obelisco
+Guerrin
+Parque de la costa
+El Ecoparque
