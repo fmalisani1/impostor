@@ -386,8 +386,6 @@ const state = {
   dictionaryCategories: [],
   selectedCategoryId: "aleatorio",
   usedWordKeys: readUsedWordsSession(),
-  previewUsedWordKeys: new Set(),
-  previewButtonLabel: getPreviewButtonDefaultLabel(),
   drag: null,
   game: null
 };
@@ -414,7 +412,6 @@ const elements = {
   dictionaryFile: document.getElementById("dictionary-file"),
   dictionaryButton: document.getElementById("dictionary-button"),
   startButton: document.getElementById("start-button"),
-  previewRandomButton: document.getElementById("preview-random-button"),
 
   passPlayer: document.getElementById("pass-player"),
   passProgress: document.getElementById("pass-progress"),
@@ -445,7 +442,6 @@ elements.addMalisanisButton.addEventListener("click", addMalisanisPlayers);
 
 elements.categorySelect.addEventListener("change", () => {
   state.selectedCategoryId = elements.categorySelect.value;
-  state.previewButtonLabel = getPreviewButtonDefaultLabel();
   updateStartAvailability();
 });
 
@@ -455,7 +451,6 @@ elements.dictionaryButton.addEventListener("click", () => {
 elements.dictionaryFile.addEventListener("change", handleDictionarySelection);
 
 elements.startButton.addEventListener("click", startGame);
-elements.previewRandomButton.addEventListener("click", previewNextRandomWord);
 elements.showRoleButton.addEventListener("click", showRoleScreen);
 elements.understoodButton.addEventListener("click", nextRevealStep);
 elements.pauseButton.addEventListener("click", togglePauseTimer);
@@ -464,15 +459,6 @@ elements.playAgainButton.addEventListener("click", prepareNextRound);
 
 void loadDictionary();
 renderPlayers();
-
-function getPreviewButtonDefaultLabel() {
-  return "Probar random temporal";
-}
-
-function resetPreviewTester() {
-  state.previewUsedWordKeys = new Set();
-  state.previewButtonLabel = getPreviewButtonDefaultLabel();
-}
 
 function addPlayer(rawName) {
   const nextNumber = state.players.length + 1;
@@ -805,7 +791,6 @@ function countWords(categories) {
 
 function setDictionary(categories, message) {
   state.dictionaryCategories = categories;
-  resetPreviewTester();
   elements.dictionaryStatus.textContent = message;
   elements.dictionaryStatus.classList.remove("warning");
   renderCategorySelect();
@@ -845,7 +830,6 @@ function updateStartAvailability() {
   );
   elements.startButton.disabled = !(hasPlayers && hasWords);
   renderSessionWordStatus();
-  renderPreviewRandomButton();
 }
 
 async function handleDictionarySelection(event) {
@@ -866,7 +850,6 @@ async function handleDictionarySelection(event) {
     elements.dictionaryStatus.textContent = "No se pudo leer el diccionario seleccionado. Usa formato con [Categorias].";
     elements.dictionaryStatus.classList.add("warning");
     state.dictionaryCategories = [];
-    resetPreviewTester();
     renderCategorySelect();
     updateStartAvailability();
   } finally {
@@ -1071,38 +1054,6 @@ function pickWordFromRoundSelection(roundSelection) {
     category: roundSelection.category,
     secretWord: randomFrom(roundSelection.availableWords)
   };
-}
-
-function renderPreviewRandomButton() {
-  if (!elements.previewRandomButton) {
-    return;
-  }
-
-  const roundSelection = resolveRoundSelectionFor(state.previewUsedWordKeys);
-  if (!roundSelection) {
-    elements.previewRandomButton.disabled = true;
-    elements.previewRandomButton.textContent =
-      state.dictionaryCategories.length === 0
-        ? getPreviewButtonDefaultLabel()
-        : "No quedan palabras para probar";
-    return;
-  }
-
-  elements.previewRandomButton.disabled = false;
-  elements.previewRandomButton.textContent = state.previewButtonLabel;
-}
-
-function previewNextRandomWord() {
-  const roundSelection = resolveRoundSelectionFor(state.previewUsedWordKeys);
-  if (!roundSelection) {
-    renderPreviewRandomButton();
-    return;
-  }
-
-  const { category, secretWord } = pickWordFromRoundSelection(roundSelection);
-  state.previewUsedWordKeys.add(normalizeWordKey(secretWord));
-  state.previewButtonLabel = `${secretWord} (${category.name})`;
-  renderPreviewRandomButton();
 }
 
 function startGame() {

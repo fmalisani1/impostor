@@ -341,13 +341,6 @@ select + .label {
   margin-top: 12px;
 }
 
-.debug-preview-button {
-  margin-top: 18px;
-  min-height: 54px;
-  white-space: normal;
-  word-break: break-word;
-}
-
 @media (max-width: 500px) {
   .row {
     flex-direction: column;
