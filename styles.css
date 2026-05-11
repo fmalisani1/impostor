@@ -47,6 +47,30 @@ body {
   color: var(--muted);
 }
 
+.mode-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 14px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.mode-tab {
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.mode-tab.active {
+  color: var(--text);
+  background: linear-gradient(120deg, var(--accent-2), var(--accent));
+}
+
 .screen {
   display: none;
   gap: 14px;
@@ -290,6 +314,14 @@ select + .label {
 .role-card.impostor {
   background: linear-gradient(160deg, rgba(97, 22, 35, 0.63), rgba(56, 13, 30, 0.58));
   border-color: rgba(255, 110, 130, 0.75);
+}
+
+.mime-card {
+  margin: 8px 0 14px;
+  border-radius: 14px;
+  padding: 18px;
+  background: linear-gradient(160deg, rgba(59, 70, 26, 0.55), rgba(24, 51, 48, 0.5));
+  border: 1px solid rgba(255, 209, 102, 0.52);
 }
 
 .role-label {

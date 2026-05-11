@@ -1,4 +1,5 @@
 const MIN_PLAYERS = 3;
+const MIN_MIME_PLAYERS = 2;
 const DICTIONARY_CACHE_KEY = "impostor_dictionary_cache_v2";
 const USED_WORDS_SESSION_KEY = "impostor_used_words_session_v1";
 const MALISANIS_PLAYERS = ["Fede", "Viri", "Norbert", "Marta", "Dani", "Romi", "Clari"];
@@ -354,13 +355,10 @@ Toy Story
 Frozen
 Mi pobre angelito
 E.T.
-Bambi
 Buscando a Nemo
 Peter Pan
 Mary Poppins
-El mago de Oz
 Jurassic Park
-Matilda
 Los Increibles
 Monsters, Inc.
 La sirenita
@@ -379,13 +377,277 @@ Obelisco
 Guerrin
 Parque de la costa
 El Ecoparque
+Teatro Colón
 `;
 
+const MIME_DICTIONARY_TEXT = `[Animales raros]
+Ornitorrinco
+Camaleon
+Perezoso
+Armadillo
+Flamenco
+Tucan
+Suricata
+Erizo
+Lemur
+Oso hormiguero
+Murcielago
+Ajolote
+Medusa
+Caballito de mar
+Pulpo
+Calamar
+Langosta
+Cangrejo
+Caracol
+Mantis religiosa
+Escorpion
+Rinoceronte
+Hipopotamo
+Pavo real
+Koala
+Mapache
+Nutria
+Castor
+Topo
+Comadreja
+Iguana
+Tarantula
+Puercoespin
+Morsa
+Pez globo
+
+[Animales dificiles]
+Cisne
+Buitre
+Zorro
+Pantera
+Aguila
+Buho
+Hiena
+Llama
+Alpaca
+Jabali
+Gacela
+Antilope
+Pelicano
+Foca
+Ballena
+Delfin
+Tiburon
+Mamut
+Dodo
+Dragon de Komodo
+Nandu
+Colibri
+Luciernaga
+Reno
+Camello
+
+[Objetos complicados]
+Brujula
+Catalejo
+Binoculares
+Abaco
+Tocadiscos
+Maquina de escribir
+Caja fuerte
+Detector de metales
+Paracaidas
+Telescopio
+Microscopio
+Fonografo
+Reloj de arena
+Marioneta
+Boomerang
+Lupa
+Palanca
+Polea
+Extintor
+Salvavidas
+Cerradura
+Candado con clave
+Mapa del tesoro
+Antena
+Radar
+Trampa para ratones
+Molino de viento
+Sube y baja
+Tobogan
+Titere
+Botella con mensaje
+Globo terraqueo
+Ancla
+Timón de barco
+Iman
+
+[Objetos con historia]
+Corona
+Capa de mago
+Varita magica
+Escudo
+Espada de juguete
+Casco de astronauta
+Traje de buzo
+Mascara de teatro
+Disfraz incomodo
+Album de fotos
+Carta secreta
+Diario intimo
+Cofre cerrado
+Llave misteriosa
+Mapa arrugado
+Espejo encantado
+Lampara antigua
+Sillon roto
+Cuadro torcido
+Jarron carisimo
+Robot viejo
+Control sin pilas
+Remoto universal
+Telefono publico
+Campana de hotel
+
+[Estados y emociones]
+Tener culpa
+Estar orgulloso
+Tener verguenza
+Estar desconfiado
+Estar confundido
+Aburrirse en una reunion
+Estar nervioso
+Estar emocionado
+Fingir sorpresa
+Tener miedo sin gritar
+Estar impaciente
+Tener sueño en clase
+Estar enamorado
+Estar ofendido
+Estar celoso
+Sentirse aliviado
+Tener asco
+Estar distraido
+Estar concentrado
+Estar arrepentido
+Hacerse el importante
+Tener una idea brillante
+Estar de mal humor
+No poder creer lo que viste
+Guardar la compostura
+
+[Situaciones]
+Llegar tarde al colegio
+Encontrarse con alguien famoso
+Perder una llave
+Olvidar un cumpleaños
+Ganar la loteria
+Esperar al medico
+Perder una valija
+Quedarse encerrado en un ascensor
+Recibir malas noticias
+Contar un secreto
+Intentar no reirse
+Entrar a un lugar equivocado
+Perderse en un supermercado
+Querer pedir perdon
+Encontrar un regalo escondido
+Ver un precio carisimo
+Olvidarse la letra de una cancion
+Tocar timbre y salir corriendo
+Hacer una promesa
+Ver una cucaracha
+Cruzar una calle con mucho trafico
+Creer que viste un fantasma
+Probar comida que no te gusta
+Quedarse sin bateria
+Llegar a una fiesta sorpresa
+Esperar una nota de examen
+Romper algo prestado
+Recibir un reto
+Descubrir una mentira
+Perder una apuesta
+
+[Lugares y momentos]
+Sala de espera
+Casamiento
+Primer dia de clases
+Cumpleaños sorpresa
+Consulta con el dentista
+Viaje en avion
+Campamento de noche
+Clase de gimnasia
+Supermercado lleno
+Colectivo lleno
+Playa con viento
+Restaurante elegante
+Teatro en silencio
+Museo aburrido
+Cine de terror
+Parque de diversiones
+Peluqueria
+Cancha en penales
+Aeropuerto
+Fiesta de disfraces
+
+[Personajes para actuar]
+Detective
+Espia
+Ladron arrepentido
+Reina enojada
+Profesor estricto
+Vecino chusma
+Nene caprichoso
+Abuela moderna
+Vendedor insistente
+Director de orquesta
+Presentador de television
+Guardia de seguridad
+Mozo confundido
+Turista perdido
+Entrenador exigente
+Juez serio
+Mago que falla
+Cantante sin voz
+Actor dramatico
+Chef apurado
+
+[Desafios familiares]
+El piso esta caliente
+No despertar al bebe
+La comida esta quemada
+Se corto la luz
+Hay olor raro
+Te pica todo
+Tenes chicle pegado
+No entra en la valija
+El perro se escapo
+La puerta no abre
+Se perdio el control remoto
+Alguien ronca muy fuerte
+La silla esta rota
+La sopa quema
+El zapato aprieta
+Te equivocaste de colectivo
+No queres compartir
+Te estan copiando en la prueba
+La foto salio mal
+El regalo no te gusta
+El ascensor se mueve raro
+El pelo quedo horrible
+Hay que hablar bajito
+Te olvidaste el nombre
+La torta se cae`;
+
 const state = {
+  activeMode: "impostor",
   players: [],
   dictionaryCategories: [],
+  mimeCategories: parseDictionaryText(MIME_DICTIONARY_TEXT),
+  dictionaryToolsVisible: false,
   selectedCategoryId: "aleatorio",
   usedWordKeys: readUsedWordsSession(),
+  mimeSelectedCategoryId: "aleatorio",
+  mime: null,
   drag: null,
   game: null
 };
@@ -395,19 +657,28 @@ const screens = {
   pass: document.getElementById("pass-screen"),
   role: document.getElementById("role-screen"),
   timer: document.getElementById("timer-screen"),
-  end: document.getElementById("end-screen")
+  end: document.getElementById("end-screen"),
+  mimePass: document.getElementById("mime-pass-screen"),
+  mimeWord: document.getElementById("mime-word-screen"),
+  mimeEnd: document.getElementById("mime-end-screen")
 };
 
 const elements = {
+  modeTabs: [...document.querySelectorAll(".mode-tab")],
   playerForm: document.getElementById("player-form"),
   playerInput: document.getElementById("player-input"),
   playersList: document.getElementById("players-list"),
+  playersHint: document.getElementById("players-hint"),
   addMalisanisButton: document.getElementById("add-malisanis-button"),
 
+  settingsTitle: document.getElementById("settings-title"),
+  categoryLabel: document.getElementById("category-label"),
   categorySelect: document.getElementById("category-select"),
+  durationField: document.getElementById("duration-field"),
   durationSelect: document.getElementById("duration-select"),
   dictionaryStatus: document.getElementById("dictionary-status"),
   sessionWordStatus: document.getElementById("session-word-status"),
+  mimeWordStatus: document.getElementById("mime-word-status"),
   dictionaryTools: document.getElementById("dictionary-tools"),
   dictionaryFile: document.getElementById("dictionary-file"),
   dictionaryButton: document.getElementById("dictionary-button"),
@@ -430,7 +701,18 @@ const elements = {
   finishButton: document.getElementById("finish-button"),
 
   endSummary: document.getElementById("end-summary"),
-  playAgainButton: document.getElementById("play-again-button")
+  playAgainButton: document.getElementById("play-again-button"),
+
+  mimePlayer: document.getElementById("mime-player"),
+  mimeProgress: document.getElementById("mime-progress"),
+  showMimeWordButton: document.getElementById("show-mime-word-button"),
+  mimeWordPlayer: document.getElementById("mime-word-player"),
+  mimeSecretWord: document.getElementById("mime-secret-word"),
+  mimeCategory: document.getElementById("mime-category"),
+  nextMimeTurnButton: document.getElementById("next-mime-turn-button"),
+  finishMimeButton: document.getElementById("finish-mime-button"),
+  mimeEndSummary: document.getElementById("mime-end-summary"),
+  playMimeAgainButton: document.getElementById("play-mime-again-button")
 };
 
 elements.playerForm.addEventListener("submit", (event) => {
@@ -440,8 +722,16 @@ elements.playerForm.addEventListener("submit", (event) => {
 
 elements.addMalisanisButton.addEventListener("click", addMalisanisPlayers);
 
+elements.modeTabs.forEach((button) => {
+  button.addEventListener("click", () => switchMode(button.dataset.mode));
+});
+
 elements.categorySelect.addEventListener("change", () => {
-  state.selectedCategoryId = elements.categorySelect.value;
+  if (state.activeMode === "mimica") {
+    state.mimeSelectedCategoryId = elements.categorySelect.value;
+  } else {
+    state.selectedCategoryId = elements.categorySelect.value;
+  }
   updateStartAvailability();
 });
 
@@ -456,9 +746,58 @@ elements.understoodButton.addEventListener("click", nextRevealStep);
 elements.pauseButton.addEventListener("click", togglePauseTimer);
 elements.finishButton.addEventListener("click", () => finishGame("Partida finalizada manualmente."));
 elements.playAgainButton.addEventListener("click", prepareNextRound);
+elements.showMimeWordButton.addEventListener("click", showMimeWordScreen);
+elements.nextMimeTurnButton.addEventListener("click", nextMimeTurn);
+elements.finishMimeButton.addEventListener("click", () => finishMimeGame("Juego terminado."));
+elements.playMimeAgainButton.addEventListener("click", prepareMimeSetup);
 
 void loadDictionary();
+renderMode();
 renderPlayers();
+
+function switchMode(mode) {
+  if (!["impostor", "mimica"].includes(mode) || state.activeMode === mode) {
+    return;
+  }
+
+  stopTimerLoop();
+  state.activeMode = mode;
+  state.game = null;
+  state.mime = null;
+  renderMode();
+  showScreen("setup");
+  updateStartAvailability();
+}
+
+function renderMode() {
+  const isMimeMode = state.activeMode === "mimica";
+  elements.modeTabs.forEach((button) => {
+    const isActive = button.dataset.mode === state.activeMode;
+    button.classList.toggle("active", isActive);
+    button.setAttribute("aria-selected", String(isActive));
+  });
+
+  elements.playersHint.textContent = isMimeMode
+    ? "Agrega al menos 2 jugadores para empezar."
+    : "Agrega al menos 3 jugadores para empezar.";
+  elements.settingsTitle.textContent = isMimeMode ? "Mimica" : "Partida";
+  elements.categoryLabel.textContent = isMimeMode ? "Tipo de palabras" : "Tema de palabras";
+  elements.startButton.textContent = isMimeMode ? "Empezar mimica" : "Iniciar partida";
+  elements.durationField.classList.toggle("hidden", isMimeMode);
+  document.querySelectorAll(".impostor-setting").forEach((element) => {
+    element.classList.toggle("hidden", isMimeMode);
+  });
+  elements.mimeWordStatus.classList.toggle("hidden", !isMimeMode);
+  renderDictionaryTools();
+  renderCategorySelect();
+}
+
+function renderDictionaryTools() {
+  elements.dictionaryTools.classList.toggle(
+    "hidden",
+    state.activeMode === "mimica" || !state.dictionaryToolsVisible
+  );
+}
 
 function addPlayer(rawName) {
   const nextNumber = state.players.length + 1;
@@ -653,9 +992,11 @@ async function loadDictionary() {
     const categories = parseDictionaryText(text);
     setDictionary(categories, `Diccionario cargado: ${countWords(categories)} palabras en ${categories.length} categorias.`);
     saveDictionaryCache(text);
-    elements.dictionaryTools.classList.add("hidden");
+    state.dictionaryToolsVisible = false;
+    renderDictionaryTools();
   } catch (_error) {
-    elements.dictionaryTools.classList.remove("hidden");
+    state.dictionaryToolsVisible = true;
+    renderDictionaryTools();
 
     const cachedText = readDictionaryCache();
     if (cachedText) {
@@ -798,7 +1139,9 @@ function setDictionary(categories, message) {
 }
 
 function renderCategorySelect() {
-  const previousValue = state.selectedCategoryId;
+  const isMimeMode = state.activeMode === "mimica";
+  const categories = isMimeMode ? state.mimeCategories : state.dictionaryCategories;
+  const previousValue = isMimeMode ? state.mimeSelectedCategoryId : state.selectedCategoryId;
   elements.categorySelect.innerHTML = "";
 
   const randomOption = document.createElement("option");
@@ -806,28 +1149,37 @@ function renderCategorySelect() {
   randomOption.textContent = "Aleatorio";
   elements.categorySelect.appendChild(randomOption);
 
-  state.dictionaryCategories.forEach((category) => {
+  categories.forEach((category) => {
     const option = document.createElement("option");
     option.value = category.id;
     option.textContent = `${category.name} (${category.words.length})`;
     elements.categorySelect.appendChild(option);
   });
 
-  const selectedExists =
-    previousValue === "aleatorio" || state.dictionaryCategories.some((category) => category.id === previousValue);
+  const selectedExists = previousValue === "aleatorio" || categories.some((category) => category.id === previousValue);
 
-  state.selectedCategoryId = selectedExists ? previousValue : "aleatorio";
-  elements.categorySelect.value = state.selectedCategoryId;
+  const selectedValue = selectedExists ? previousValue : "aleatorio";
+  if (isMimeMode) {
+    state.mimeSelectedCategoryId = selectedValue;
+  } else {
+    state.selectedCategoryId = selectedValue;
+  }
+  elements.categorySelect.value = selectedValue;
 }
 
 function updateStartAvailability() {
+  if (state.activeMode === "mimica") {
+    const hasPlayers = state.players.length >= MIN_MIME_PLAYERS;
+    const roundSelection = resolveMimeSelection();
+    const hasWords = hasAvailableSelectionWords(roundSelection);
+    elements.startButton.disabled = !(hasPlayers && hasWords);
+    renderMimeWordStatus();
+    return;
+  }
+
   const hasPlayers = state.players.length >= MIN_PLAYERS;
   const roundSelection = resolveRoundSelection();
-  const hasWords = Boolean(
-    roundSelection &&
-      ((roundSelection.mode === "aleatorio" && roundSelection.availablePool.length > 0) ||
-        (roundSelection.mode === "categoria" && roundSelection.availableWords.length > 0))
-  );
+  const hasWords = hasAvailableSelectionWords(roundSelection);
   elements.startButton.disabled = !(hasPlayers && hasWords);
   renderSessionWordStatus();
 }
@@ -911,10 +1263,10 @@ function getAvailableWords(category) {
   return getAvailableWordsFor(category, state.usedWordKeys);
 }
 
-function getRandomAvailableWordPoolFor(usedWordKeys) {
+function getRandomAvailableWordPoolFor(categories, usedWordKeys) {
   const pool = new Map();
 
-  state.dictionaryCategories.forEach((category) => {
+  categories.forEach((category) => {
     category.words.forEach((word) => {
       const key = normalizeWordKey(word);
       if (usedWordKeys.has(key)) {
@@ -939,7 +1291,7 @@ function getRandomAvailableWordPoolFor(usedWordKeys) {
 }
 
 function getRandomAvailableWordPool() {
-  return getRandomAvailableWordPoolFor(state.usedWordKeys);
+  return getRandomAvailableWordPoolFor(state.dictionaryCategories, state.usedWordKeys);
 }
 
 function countAvailableWordsFor(categories, usedWordKeys) {
@@ -997,13 +1349,30 @@ function renderSessionWordStatus() {
   elements.sessionWordStatus.classList.toggle("warning", availableWords === 0);
 }
 
-function resolveRoundSelectionFor(usedWordKeys) {
-  if (state.dictionaryCategories.length === 0) {
+function renderMimeWordStatus() {
+  const availableWords = countAvailableWordsFor(state.mimeCategories, state.mime?.usedWordKeys || new Set());
+  elements.mimeWordStatus.textContent =
+    availableWords > 0
+      ? `Palabras de mimica disponibles: ${availableWords}.`
+      : "Ya se usaron todas las palabras de mimica.";
+  elements.mimeWordStatus.classList.toggle("warning", availableWords === 0);
+}
+
+function hasAvailableSelectionWords(selection) {
+  return Boolean(
+    selection &&
+      ((selection.mode === "aleatorio" && selection.availablePool.length > 0) ||
+        (selection.mode === "categoria" && selection.availableWords.length > 0))
+  );
+}
+
+function resolveWordSelectionFor(categories, selectedCategoryId, usedWordKeys) {
+  if (categories.length === 0) {
     return null;
   }
 
-  if (state.selectedCategoryId === "aleatorio") {
-    const availablePool = getRandomAvailableWordPoolFor(usedWordKeys);
+  if (selectedCategoryId === "aleatorio") {
+    const availablePool = getRandomAvailableWordPoolFor(categories, usedWordKeys);
     if (availablePool.length === 0) {
       return null;
     }
@@ -1011,9 +1380,9 @@ function resolveRoundSelectionFor(usedWordKeys) {
     return { mode: "aleatorio", availablePool };
   }
 
-  const selectedCategory = state.dictionaryCategories.find((category) => category.id === state.selectedCategoryId);
+  const selectedCategory = categories.find((category) => category.id === selectedCategoryId);
   if (!selectedCategory) {
-    return resolveFallbackRoundSelectionFor(usedWordKeys);
+    return resolveFallbackWordSelectionFor(categories, usedWordKeys);
   }
 
   const availableWords = getAvailableWordsFor(selectedCategory, usedWordKeys);
@@ -1024,12 +1393,16 @@ function resolveRoundSelectionFor(usedWordKeys) {
   return { mode: "categoria", category: selectedCategory, availableWords };
 }
 
+function resolveRoundSelectionFor(usedWordKeys) {
+  return resolveWordSelectionFor(state.dictionaryCategories, state.selectedCategoryId, usedWordKeys);
+}
+
 function resolveRoundSelection() {
   return resolveRoundSelectionFor(state.usedWordKeys);
 }
 
-function resolveFallbackRoundSelectionFor(usedWordKeys) {
-  const availablePool = getRandomAvailableWordPoolFor(usedWordKeys);
+function resolveFallbackWordSelectionFor(categories, usedWordKeys) {
+  const availablePool = getRandomAvailableWordPoolFor(categories, usedWordKeys);
   if (availablePool.length === 0) {
     return null;
   }
@@ -1038,7 +1411,15 @@ function resolveFallbackRoundSelectionFor(usedWordKeys) {
 }
 
 function resolveFallbackRoundSelection() {
-  return resolveFallbackRoundSelectionFor(state.usedWordKeys);
+  return resolveFallbackWordSelectionFor(state.dictionaryCategories, state.usedWordKeys);
+}
+
+function resolveMimeSelection() {
+  return resolveWordSelectionFor(
+    state.mimeCategories,
+    state.mimeSelectedCategoryId,
+    state.mime?.usedWordKeys || new Set()
+  );
 }
 
 function pickWordFromRoundSelection(roundSelection) {
@@ -1057,6 +1438,11 @@ function pickWordFromRoundSelection(roundSelection) {
 }
 
 function startGame() {
+  if (state.activeMode === "mimica") {
+    startMimeGame();
+    return;
+  }
+
   if (state.players.length < MIN_PLAYERS) {
     return;
   }
@@ -1088,6 +1474,101 @@ function startGame() {
 
   showScreen("pass");
   renderPassStep();
+}
+
+function startMimeGame() {
+  if (state.players.length < MIN_MIME_PLAYERS) {
+    return;
+  }
+
+  state.mime = {
+    usedWordKeys: new Set(),
+    playerIndex: 0,
+    turnsPlayed: 0,
+    currentWord: null,
+    currentCategoryName: null
+  };
+
+  if (!resolveMimeSelection()) {
+    state.mime = null;
+    return;
+  }
+
+  showScreen("mimePass");
+  renderMimePassStep();
+}
+
+function renderMimePassStep() {
+  const mime = state.mime;
+  if (!mime) {
+    return;
+  }
+
+  const playerName = state.players[mime.playerIndex];
+  elements.mimePlayer.textContent = playerName;
+  elements.mimeProgress.textContent = `Turno ${mime.turnsPlayed + 1}`;
+}
+
+function showMimeWordScreen() {
+  const mime = state.mime;
+  if (!mime) {
+    return;
+  }
+
+  const roundSelection = resolveMimeSelection();
+  if (!roundSelection) {
+    finishMimeGame("No quedan palabras disponibles.");
+    return;
+  }
+
+  const { category, secretWord } = pickWordFromRoundSelection(roundSelection);
+  mime.usedWordKeys.add(normalizeWordKey(secretWord));
+  mime.currentWord = secretWord;
+  mime.currentCategoryName = category.name;
+
+  elements.mimeWordPlayer.textContent = state.players[mime.playerIndex];
+  elements.mimeSecretWord.textContent = secretWord;
+  elements.mimeCategory.textContent = category.name;
+  showScreen("mimeWord");
+}
+
+function nextMimeTurn() {
+  const mime = state.mime;
+  if (!mime) {
+    return;
+  }
+
+  mime.turnsPlayed += 1;
+  mime.playerIndex = (mime.playerIndex + 1) % state.players.length;
+  mime.currentWord = null;
+  mime.currentCategoryName = null;
+
+  if (!resolveMimeSelection()) {
+    finishMimeGame("No quedan palabras disponibles.");
+    return;
+  }
+
+  renderMimePassStep();
+  showScreen("mimePass");
+}
+
+function finishMimeGame(reason) {
+  const mime = state.mime;
+  if (!mime) {
+    return;
+  }
+
+  const playedTurns = mime.turnsPlayed + (mime.currentWord ? 1 : 0);
+  elements.mimeEndSummary.textContent = `${reason} Turnos jugados: ${playedTurns}.`;
+  showScreen("mimeEnd");
+}
+
+function prepareMimeSetup() {
+  state.mime = null;
+  state.activeMode = "mimica";
+  renderMode();
+  showScreen("setup");
+  updateStartAvailability();
 }
 
 function renderPassStep() {

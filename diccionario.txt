@@ -349,13 +349,10 @@ Toy Story
 Frozen
 Mi pobre angelito
 E.T.
-Bambi
 Buscando a Nemo
 Peter Pan
 Mary Poppins
-El mago de Oz
 Jurassic Park
-Matilda
 Los Increibles
 Monsters, Inc.
 La sirenita
@@ -374,3 +371,4 @@ Obelisco
 Guerrin
 Parque de la costa
 El Ecoparque
+Teatro Colón
