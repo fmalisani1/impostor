@@ -1,17 +1,25 @@
 # Impostor Familiar (HTML)
 
-Prototipo del juego tipo "Impostor" para jugar en un solo celular, con tema oscuro.
+Juego local para compartir un solo celular, con modos Impostor y Digalo con mimica.
 
 ## Como usar
 
+### Impostor
+
 1. Agrega jugadores (minimo 3).
-2. Si quieres, usa el boton `AGREGAR MALISANIS` para cargar: Fede, Clari, Marta, Norbert, Dani y Romi.
-3. Elige duracion.
-4. Elige el tema de palabras (o `Aleatorio`).
-5. Inicia partida.
-6. Pasa el celular y cada jugador revela su rol.
-7. Al final empieza el temporizador.
-8. Cuando termina, puedes jugar de nuevo.
+2. Elige duracion y tema de palabras.
+3. Pasa el celular para que cada jugador revele su rol.
+4. Juega hasta que termine el temporizador.
+
+### Digalo con mimica
+
+1. Elige una categoria de frases o `Aleatorio`.
+2. Quien quiera actuar toma el celular y revela la frase.
+3. Pasa al siguiente turno cuando terminen de adivinar.
+
+Las 300 frases de mimica tienen varias palabras. Se muestran en orden aleatorio sin repetirse durante la sesion de la pestaña. Cuando se completa el conjunto elegido, se mezcla nuevamente y comienza otro ciclo.
+
+Cada frase se puede marcar con like o dislike. Las valoraciones se guardan localmente en el navegador: los likes siguen apareciendo con la misma probabilidad, mientras que los dislikes quedan fuera de los proximos ciclos. El panel `Valoraciones` permite restaurarlas, borrarlas o descargar `dislikes.txt` para depurar el diccionario.
 
 ## Diccionario
 
@@ -56,3 +64,9 @@ http://localhost:5500
 ```
 
 Tambien puedes subir estos mismos archivos a cualquier hosting estatico.
+
+## Pruebas
+
+```bash
+node --test tests/mime-flow.test.cjs
+```

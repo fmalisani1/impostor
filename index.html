@@ -23,7 +23,7 @@
         </button>
       </div>
 
-      <div class="card">
+      <div id="players-card" class="card">
         <div class="card-header">
           <h2>Jugadores</h2>
           <button id="add-malisanis-button" type="button" class="subtle">AGREGAR MALISANIS</button>
@@ -54,6 +54,23 @@
         <p id="dictionary-status" class="muted impostor-setting">Cargando palabras...</p>
         <p id="session-word-status" class="muted impostor-setting"></p>
         <p id="mime-word-status" class="muted hidden"></p>
+        <div id="mime-ratings-tools" class="mime-ratings-tools hidden">
+          <button id="mime-ratings-toggle" type="button" class="secondary full" aria-expanded="false">
+            Valoraciones
+          </button>
+          <div id="mime-ratings-panel" class="mime-ratings-panel hidden">
+            <div class="rating-summary" aria-label="Resumen de valoraciones">
+              <span>👍 <strong id="mime-liked-count">0</strong> likes</span>
+              <span>👎 <strong id="mime-disliked-count">0</strong> dislikes</span>
+              <span>Sin valorar: <strong id="mime-unrated-count">300</strong></span>
+            </div>
+            <div class="actions rating-management-actions">
+              <button id="download-dislikes-button" type="button" class="secondary">Descargar dislikes.txt</button>
+              <button id="clear-mime-ratings-button" type="button" class="danger">Borrar valoraciones</button>
+            </div>
+            <div id="mime-ratings-list" class="mime-ratings-list"></div>
+          </div>
+        </div>
         <div id="dictionary-tools" class="dictionary-tools hidden">
           <input id="dictionary-file" type="file" accept=".txt,text/plain" class="hidden">
           <button id="dictionary-button" type="button" class="secondary full">Seleccionar diccionario</button>
@@ -109,23 +126,29 @@
     <section id="mime-pass-screen" class="screen">
       <div class="card center">
         <h2>Turno de mimica</h2>
-        <p class="muted">Le toca actuar a:</p>
-        <p id="mime-player" class="player-highlight"></p>
         <p id="mime-progress" class="pill"></p>
-        <button id="show-mime-word-button" class="primary full">Ver palabra</button>
+        <p class="muted">Agarra el celular cuando quieras representar.</p>
+        <button id="show-mime-word-button" class="primary full">Ver frase</button>
       </div>
     </section>
 
     <section id="mime-word-screen" class="screen">
       <div class="card center">
-        <p id="mime-word-player" class="player-title"></p>
         <div class="mime-card">
           <p class="role-label">Representa</p>
           <p id="mime-secret-word" class="secret-word"></p>
           <p id="mime-category" class="pill"></p>
         </div>
+        <div class="mime-rating-controls">
+          <p class="muted">¿Qué te pareció esta frase?</p>
+          <div class="rating-actions" role="group" aria-label="Valorar frase">
+            <button id="mime-like-button" type="button" class="rating-button like" aria-pressed="false">👍 Me gusta</button>
+            <button id="mime-dislike-button" type="button" class="rating-button dislike" aria-pressed="false">👎 No me gusta</button>
+          </div>
+          <p id="mime-rating-feedback" class="muted rating-feedback" aria-live="polite"></p>
+        </div>
         <div class="actions">
-          <button id="next-mime-turn-button" class="primary">Siguiente jugador</button>
+          <button id="next-mime-turn-button" class="primary">Siguiente turno</button>
           <button id="finish-mime-button" class="danger">Terminar</button>
         </div>
       </div>
