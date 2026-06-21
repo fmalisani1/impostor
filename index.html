@@ -94,9 +94,8 @@
       <div class="card center">
         <p id="role-player" class="player-title"></p>
         <div id="role-card" class="role-card citizen">
-          <p class="role-label">Tu rol</p>
+          <p id="role-label" class="role-label">Tu rol</p>
           <p id="role-name" class="role-name"></p>
-          <p id="word-label" class="role-label">Tu palabra</p>
           <p id="secret-word" class="secret-word"></p>
           <p id="impostor-hint" class="impostor-hint hidden">Sos el impostor. Disimula y descubri la palabra.</p>
         </div>
@@ -157,7 +156,10 @@
       <div class="card center">
         <h2>Mimica terminada</h2>
         <p id="mime-end-summary" class="muted"></p>
-        <button id="play-mime-again-button" class="primary">Jugar de nuevo</button>
+        <div class="actions">
+          <button id="play-mime-again-button" class="primary">Jugar de nuevo</button>
+          <button id="exit-mime-button" class="secondary">Salir</button>
+        </div>
       </div>
     </section>
   </main>

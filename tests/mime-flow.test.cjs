@@ -188,6 +188,42 @@ test("mímica se puede iniciar sin jugadores y oculta su configuración", () => 
   assert.equal(app.elements.get("mime-progress").textContent, "Turno 1");
 });
 
+test("salir de mímica vuelve a la pantalla principal", () => {
+  const app = createApp();
+  app.run("switchMode('mimica'); startMimeGame(); finishMimeGame('Juego terminado.'); exitMimeGame()");
+
+  assert.equal(app.run("state.activeMode"), "impostor");
+  assert.equal(app.run("state.mime"), null);
+  assert.equal(app.elements.get("setup-screen").classList.contains("active"), true);
+  assert.equal(app.elements.get("players-card").classList.contains("hidden"), false);
+});
+
+test("el ciudadano ve directamente la palabra y solo el impostor ve su rol", () => {
+  const app = createApp();
+  app.run(`
+    state.players = ['Ana', 'Beto', 'Cami'];
+    state.game = {
+      revealOrder: [0, 1, 2],
+      revealPosition: 0,
+      impostorIndex: 1,
+      secretWord: 'Parque de diversiones'
+    };
+    showRoleScreen();
+  `);
+
+  assert.equal(app.elements.get("role-name").textContent, "");
+  assert.equal(app.elements.get("role-name").classList.contains("hidden"), true);
+  assert.equal(app.elements.get("role-label").classList.contains("hidden"), true);
+  assert.equal(app.elements.get("secret-word").textContent, "Parque de diversiones");
+  assert.equal(app.elements.get("secret-word").classList.contains("hidden"), false);
+
+  app.run("state.game.revealPosition = 1; showRoleScreen()");
+  assert.equal(app.elements.get("role-name").textContent, "Impostor");
+  assert.equal(app.elements.get("role-name").classList.contains("hidden"), false);
+  assert.equal(app.elements.get("role-label").classList.contains("hidden"), false);
+  assert.equal(app.elements.get("secret-word").classList.contains("hidden"), true);
+});
+
 test("cada frase aparece una sola vez antes de comenzar un ciclo nuevo", () => {
   const app = createApp();
   app.run("switchMode('mimica'); startMimeGame()");

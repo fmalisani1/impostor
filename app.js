@@ -912,8 +912,8 @@ const elements = {
 
   rolePlayer: document.getElementById("role-player"),
   roleCard: document.getElementById("role-card"),
+  roleLabel: document.getElementById("role-label"),
   roleName: document.getElementById("role-name"),
-  wordLabel: document.getElementById("word-label"),
   secretWord: document.getElementById("secret-word"),
   impostorHint: document.getElementById("impostor-hint"),
   understoodButton: document.getElementById("understood-button"),
@@ -935,7 +935,8 @@ const elements = {
   nextMimeTurnButton: document.getElementById("next-mime-turn-button"),
   finishMimeButton: document.getElementById("finish-mime-button"),
   mimeEndSummary: document.getElementById("mime-end-summary"),
-  playMimeAgainButton: document.getElementById("play-mime-again-button")
+  playMimeAgainButton: document.getElementById("play-mime-again-button"),
+  exitMimeButton: document.getElementById("exit-mime-button")
 };
 
 elements.playerForm.addEventListener("submit", (event) => {
@@ -975,6 +976,7 @@ elements.mimeDislikeButton.addEventListener("click", () => toggleCurrentMimeRati
 elements.nextMimeTurnButton.addEventListener("click", nextMimeTurn);
 elements.finishMimeButton.addEventListener("click", () => finishMimeGame("Juego terminado."));
 elements.playMimeAgainButton.addEventListener("click", prepareMimeSetup);
+elements.exitMimeButton.addEventListener("click", exitMimeGame);
 elements.mimeRatingsToggle.addEventListener("click", toggleMimeRatingsPanel);
 elements.downloadDislikesButton.addEventListener("click", downloadDislikes);
 elements.clearMimeRatingsButton.addEventListener("click", clearMimeRatings);
@@ -2116,6 +2118,14 @@ function prepareMimeSetup() {
   updateStartAvailability();
 }
 
+function exitMimeGame() {
+  state.mime = null;
+  state.activeMode = "impostor";
+  renderMode();
+  showScreen("setup");
+  updateStartAvailability();
+}
+
 function renderPassStep() {
   const game = state.game;
   if (!game) {
@@ -2138,16 +2148,18 @@ function showRoleScreen() {
   const isImpostor = playerIndex === game.impostorIndex;
 
   elements.rolePlayer.textContent = playerName;
-  elements.roleName.textContent = isImpostor ? "Impostor" : "Ciudadano";
+  elements.roleName.textContent = isImpostor ? "Impostor" : "";
   elements.roleCard.classList.toggle("impostor", isImpostor);
   elements.roleCard.classList.toggle("citizen", !isImpostor);
 
   if (isImpostor) {
-    elements.wordLabel.classList.add("hidden");
+    elements.roleLabel.classList.remove("hidden");
+    elements.roleName.classList.remove("hidden");
     elements.secretWord.classList.add("hidden");
     elements.impostorHint.classList.remove("hidden");
   } else {
-    elements.wordLabel.classList.remove("hidden");
+    elements.roleLabel.classList.add("hidden");
+    elements.roleName.classList.add("hidden");
     elements.secretWord.classList.remove("hidden");
     elements.impostorHint.classList.add("hidden");
     elements.secretWord.textContent = game.secretWord;
