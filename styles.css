@@ -324,6 +324,36 @@ select + .label {
   border: 1px solid rgba(255, 209, 102, 0.52);
 }
 
+.mime-word-card {
+  position: relative;
+  padding-bottom: 62px;
+}
+
+.mime-next-action {
+  margin-top: 18px;
+}
+
+.mime-next-button {
+  width: 100%;
+}
+
+.mime-finish-button {
+  position: absolute;
+  right: 16px;
+  bottom: 12px;
+  padding: 5px 11px;
+  border: 1px solid rgba(255, 111, 128, 0.62);
+  border-radius: 999px;
+  background: transparent;
+  color: #ff9ba7;
+  font-size: 0.76rem;
+  line-height: 1.2;
+}
+
+.mime-finish-button:hover {
+  background: rgba(219, 61, 79, 0.14);
+}
+
 .mime-rating-controls {
   margin: 14px 0;
   padding: 14px;
