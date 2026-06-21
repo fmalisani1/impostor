@@ -3,6 +3,7 @@ const DICTIONARY_CACHE_KEY = "impostor_dictionary_cache_v2";
 const USED_WORDS_SESSION_KEY = "impostor_used_words_session_v1";
 const MIME_USED_WORDS_SESSION_KEY = "impostor_mime_used_words_session_v1";
 const MIME_RATINGS_STORAGE_KEY = "impostor_mime_ratings_v1";
+const IMPOSTOR_RATINGS_STORAGE_KEY = "impostor_word_ratings_v1";
 const MALISANIS_PLAYERS = ["Fede", "Viri", "Norbert", "Marta", "Dani", "Romi", "Clari"];
 
 const FALLBACK_DICTIONARY_TEXT = `[Objetos cotidianos]
@@ -855,6 +856,8 @@ const state = {
   dictionaryToolsVisible: false,
   selectedCategoryId: "aleatorio",
   usedWordKeys: readUsedWordsSession(),
+  impostorRatings: readImpostorRatings(),
+  impostorRatingsVisible: false,
   mimeSelectedCategoryId: "aleatorio",
   mimeUsedWordKeys: readMimeUsedWordsSession(),
   mimeRatings: readMimeRatings(),
@@ -891,6 +894,15 @@ const elements = {
   durationSelect: document.getElementById("duration-select"),
   dictionaryStatus: document.getElementById("dictionary-status"),
   sessionWordStatus: document.getElementById("session-word-status"),
+  impostorRatingsTools: document.getElementById("impostor-ratings-tools"),
+  impostorRatingsToggle: document.getElementById("impostor-ratings-toggle"),
+  impostorRatingsPanel: document.getElementById("impostor-ratings-panel"),
+  impostorLikedCount: document.getElementById("impostor-liked-count"),
+  impostorDislikedCount: document.getElementById("impostor-disliked-count"),
+  impostorUnratedCount: document.getElementById("impostor-unrated-count"),
+  impostorRatingsList: document.getElementById("impostor-ratings-list"),
+  downloadImpostorDislikesButton: document.getElementById("download-impostor-dislikes-button"),
+  clearImpostorRatingsButton: document.getElementById("clear-impostor-ratings-button"),
   mimeWordStatus: document.getElementById("mime-word-status"),
   mimeRatingsTools: document.getElementById("mime-ratings-tools"),
   mimeRatingsToggle: document.getElementById("mime-ratings-toggle"),
@@ -923,7 +935,15 @@ const elements = {
   finishButton: document.getElementById("finish-button"),
 
   endSummary: document.getElementById("end-summary"),
+  endReason: document.getElementById("end-reason"),
+  endCategory: document.getElementById("end-category"),
+  endWord: document.getElementById("end-word"),
+  endImpostor: document.getElementById("end-impostor"),
+  impostorLikeButton: document.getElementById("impostor-like-button"),
+  impostorDislikeButton: document.getElementById("impostor-dislike-button"),
+  impostorRatingFeedback: document.getElementById("impostor-rating-feedback"),
   playAgainButton: document.getElementById("play-again-button"),
+  exitImpostorButton: document.getElementById("exit-impostor-button"),
 
   mimeProgress: document.getElementById("mime-progress"),
   showMimeWordButton: document.getElementById("show-mime-word-button"),
@@ -969,7 +989,10 @@ elements.showRoleButton.addEventListener("click", showRoleScreen);
 elements.understoodButton.addEventListener("click", nextRevealStep);
 elements.pauseButton.addEventListener("click", togglePauseTimer);
 elements.finishButton.addEventListener("click", () => finishGame("Partida finalizada manualmente."));
-elements.playAgainButton.addEventListener("click", prepareNextRound);
+elements.impostorLikeButton.addEventListener("click", () => toggleCurrentImpostorRating("like"));
+elements.impostorDislikeButton.addEventListener("click", () => toggleCurrentImpostorRating("dislike"));
+elements.playAgainButton.addEventListener("click", playImpostorAgain);
+elements.exitImpostorButton.addEventListener("click", prepareNextRound);
 elements.showMimeWordButton.addEventListener("click", showMimeWordScreen);
 elements.mimeLikeButton.addEventListener("click", () => toggleCurrentMimeRating("like"));
 elements.mimeDislikeButton.addEventListener("click", () => toggleCurrentMimeRating("dislike"));
@@ -980,6 +1003,9 @@ elements.exitMimeButton.addEventListener("click", exitMimeGame);
 elements.mimeRatingsToggle.addEventListener("click", toggleMimeRatingsPanel);
 elements.downloadDislikesButton.addEventListener("click", downloadDislikes);
 elements.clearMimeRatingsButton.addEventListener("click", clearMimeRatings);
+elements.impostorRatingsToggle.addEventListener("click", toggleImpostorRatingsPanel);
+elements.downloadImpostorDislikesButton.addEventListener("click", downloadImpostorDislikes);
+elements.clearImpostorRatingsButton.addEventListener("click", clearImpostorRatings);
 
 void loadDictionary();
 renderMode();
@@ -1020,6 +1046,7 @@ function renderMode() {
   elements.mimeRatingsTools.classList.toggle("hidden", !isMimeMode);
   renderDictionaryTools();
   renderCategorySelect();
+  renderImpostorRatings();
   renderMimeRatings();
 }
 
@@ -1366,26 +1393,27 @@ function setDictionary(categories, message) {
   elements.dictionaryStatus.textContent = message;
   elements.dictionaryStatus.classList.remove("warning");
   renderCategorySelect();
+  renderImpostorRatings();
   updateStartAvailability();
 }
 
 function renderCategorySelect() {
   const isMimeMode = state.activeMode === "mimica";
-  const categories = isMimeMode ? getMimePlayableCategories() : state.dictionaryCategories;
+  const categories = isMimeMode ? getMimePlayableCategories() : getImpostorPlayableCategories();
   const previousValue = isMimeMode ? state.mimeSelectedCategoryId : state.selectedCategoryId;
   elements.categorySelect.innerHTML = "";
 
   const randomOption = document.createElement("option");
   randomOption.value = "aleatorio";
   randomOption.textContent = "Aleatorio";
-  randomOption.disabled = isMimeMode && countWords(categories) === 0;
+  randomOption.disabled = countWords(categories) === 0;
   elements.categorySelect.appendChild(randomOption);
 
   categories.forEach((category) => {
     const option = document.createElement("option");
     option.value = category.id;
     option.textContent = `${category.name} (${category.words.length})`;
-    option.disabled = isMimeMode && category.words.length === 0;
+    option.disabled = category.words.length === 0;
     elements.categorySelect.appendChild(option);
   });
 
@@ -1409,7 +1437,7 @@ function updateStartAvailability() {
   }
 
   const hasPlayers = state.players.length >= MIN_PLAYERS;
-  const roundSelection = resolveRoundSelection();
+  const roundSelection = resolveRoundSelectionFor(new Set());
   const hasWords = hasAvailableSelectionWords(roundSelection);
   elements.startButton.disabled = !(hasPlayers && hasWords);
   renderSessionWordStatus();
@@ -1746,6 +1774,242 @@ function clearMimeRatings() {
   updateStartAvailability();
 }
 
+function readImpostorRatings() {
+  try {
+    const raw = localStorage.getItem(IMPOSTOR_RATINGS_STORAGE_KEY);
+    if (!raw) {
+      return new Map();
+    }
+
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) {
+      return new Map();
+    }
+
+    const ratings = new Map();
+    parsed.forEach((record) => {
+      if (
+        record &&
+        typeof record.phrase === "string" &&
+        typeof record.category === "string" &&
+        ["like", "dislike"].includes(record.rating)
+      ) {
+        ratings.set(normalizeWordKey(record.phrase), {
+          phrase: record.phrase.trim(),
+          category: record.category.trim(),
+          rating: record.rating,
+          updatedAt: typeof record.updatedAt === "string" ? record.updatedAt : ""
+        });
+      }
+    });
+    return ratings;
+  } catch (_error) {
+    return new Map();
+  }
+}
+
+function saveImpostorRatings() {
+  try {
+    localStorage.setItem(IMPOSTOR_RATINGS_STORAGE_KEY, JSON.stringify([...state.impostorRatings.values()]));
+  } catch (_error) {
+    // Persistencia opcional; si falla seguimos en memoria.
+  }
+}
+
+function getImpostorRating(word) {
+  return state.impostorRatings.get(normalizeWordKey(word)) || null;
+}
+
+function isImpostorWordDisliked(word) {
+  return getImpostorRating(word)?.rating === "dislike";
+}
+
+function getImpostorPlayableCategories() {
+  return state.dictionaryCategories.map((category) => ({
+    ...category,
+    words: category.words.filter((word) => !isImpostorWordDisliked(word))
+  }));
+}
+
+function setImpostorRating(word, category, rating) {
+  const key = normalizeWordKey(word);
+  if (rating === null) {
+    state.impostorRatings.delete(key);
+  } else if (["like", "dislike"].includes(rating)) {
+    state.impostorRatings.set(key, {
+      phrase: word.trim(),
+      category: category.trim(),
+      rating,
+      updatedAt: new Date().toISOString()
+    });
+  } else {
+    return;
+  }
+
+  saveImpostorRatings();
+  renderImpostorRatingButtons();
+  renderImpostorRatings();
+  renderCategorySelect();
+  updateStartAvailability();
+}
+
+function toggleCurrentImpostorRating(rating) {
+  const game = state.game;
+  if (!game?.secretWord) {
+    return;
+  }
+
+  const currentRating = getImpostorRating(game.secretWord)?.rating;
+  setImpostorRating(
+    game.secretWord,
+    game.categoryName,
+    currentRating === rating ? null : rating
+  );
+}
+
+function renderImpostorRatingButtons() {
+  const currentWord = state.game?.secretWord;
+  const rating = currentWord ? getImpostorRating(currentWord)?.rating : null;
+
+  elements.impostorLikeButton.classList.toggle("active", rating === "like");
+  elements.impostorDislikeButton.classList.toggle("active", rating === "dislike");
+  elements.impostorLikeButton.setAttribute("aria-pressed", String(rating === "like"));
+  elements.impostorDislikeButton.setAttribute("aria-pressed", String(rating === "dislike"));
+  elements.impostorRatingFeedback.textContent =
+    rating === "like"
+      ? "Guardada como favorita. Seguira apareciendo normalmente."
+      : rating === "dislike"
+        ? "No volvera a aparecer en este navegador."
+        : "";
+}
+
+function toggleImpostorRatingsPanel() {
+  state.impostorRatingsVisible = !state.impostorRatingsVisible;
+  renderImpostorRatings();
+}
+
+function renderImpostorRatings() {
+  const records = [...state.impostorRatings.values()].sort((left, right) => {
+    if (left.rating !== right.rating) {
+      return left.rating === "dislike" ? -1 : 1;
+    }
+    return left.category.localeCompare(right.category, "es") || left.phrase.localeCompare(right.phrase, "es");
+  });
+  const liked = records.filter((record) => record.rating === "like");
+  const disliked = records.filter((record) => record.rating === "dislike");
+  const catalogKeys = new Set(
+    state.dictionaryCategories.flatMap((category) => category.words.map((word) => normalizeWordKey(word)))
+  );
+  const ratedCatalogWords = records.filter((record) => catalogKeys.has(normalizeWordKey(record.phrase))).length;
+  const unrated = Math.max(0, catalogKeys.size - ratedCatalogWords);
+
+  elements.impostorRatingsToggle.textContent = `Valoraciones: ${liked.length} likes · ${disliked.length} dislikes`;
+  elements.impostorRatingsToggle.setAttribute("aria-expanded", String(state.impostorRatingsVisible));
+  elements.impostorRatingsPanel.classList.toggle("hidden", !state.impostorRatingsVisible);
+  elements.impostorLikedCount.textContent = String(liked.length);
+  elements.impostorDislikedCount.textContent = String(disliked.length);
+  elements.impostorUnratedCount.textContent = String(unrated);
+  elements.downloadImpostorDislikesButton.disabled = disliked.length === 0;
+  elements.clearImpostorRatingsButton.disabled = records.length === 0;
+  elements.impostorRatingsList.innerHTML = "";
+
+  if (records.length === 0) {
+    const empty = document.createElement("p");
+    empty.className = "muted ratings-empty";
+    empty.textContent = "Todavia no valoraste ninguna palabra.";
+    elements.impostorRatingsList.appendChild(empty);
+    return;
+  }
+
+  records.forEach((record) => {
+    const item = document.createElement("div");
+    item.className = `rating-list-item ${record.rating}`;
+
+    const copy = document.createElement("div");
+    copy.className = "rating-list-copy";
+
+    const word = document.createElement("strong");
+    word.textContent = `${record.rating === "like" ? "👍" : "👎"} ${record.phrase}`;
+
+    const category = document.createElement("small");
+    category.textContent = record.category;
+
+    const removeButton = document.createElement("button");
+    removeButton.type = "button";
+    removeButton.className = "subtle";
+    removeButton.textContent = record.rating === "dislike" ? "Restaurar" : "Quitar";
+    removeButton.addEventListener("click", () => setImpostorRating(record.phrase, record.category, null));
+
+    copy.appendChild(word);
+    copy.appendChild(category);
+    item.appendChild(copy);
+    item.appendChild(removeButton);
+    elements.impostorRatingsList.appendChild(item);
+  });
+}
+
+function getDislikedImpostorRatings() {
+  return [...state.impostorRatings.values()]
+    .filter((record) => record.rating === "dislike")
+    .sort((left, right) =>
+      left.category.localeCompare(right.category, "es") || left.phrase.localeCompare(right.phrase, "es")
+    );
+}
+
+function createImpostorDislikesText() {
+  const disliked = getDislikedImpostorRatings();
+  if (disliked.length === 0) {
+    return "";
+  }
+
+  const grouped = new Map();
+  disliked.forEach((record) => {
+    if (!grouped.has(record.category)) {
+      grouped.set(record.category, []);
+    }
+    grouped.get(record.category).push(record.phrase);
+  });
+
+  const lines = ["# Palabras de Impostor marcadas con dislike", ""];
+  grouped.forEach((words, category) => {
+    lines.push(`[${category}]`, ...words, "");
+  });
+  return lines.join("\n");
+}
+
+function downloadImpostorDislikes() {
+  const text = createImpostorDislikesText();
+  if (!text) {
+    return;
+  }
+
+  const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `dislikes-impostor-${new Date().toISOString().slice(0, 10)}.txt`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+function clearImpostorRatings() {
+  if (!window.confirm("¿Borrar todos los likes y dislikes de Impostor guardados en este navegador?")) {
+    return;
+  }
+
+  state.impostorRatings.clear();
+  try {
+    localStorage.removeItem(IMPOSTOR_RATINGS_STORAGE_KEY);
+  } catch (_error) {
+    // El estado en memoria ya quedo limpio.
+  }
+  renderImpostorRatings();
+  renderCategorySelect();
+  updateStartAvailability();
+}
+
 function normalizeWordKey(word) {
   return word.trim().toLowerCase().replace(/\s+/g, " ");
 }
@@ -1819,28 +2083,20 @@ function renderSessionWordStatus() {
     return;
   }
 
-  if (state.selectedCategoryId === "aleatorio") {
-    const availableWords = countAvailableWords(state.dictionaryCategories);
-    elements.sessionWordStatus.textContent =
-      availableWords > 0
-        ? `Palabras sin repetir en esta sesion: ${availableWords}.`
-        : "Ya se usaron todas las palabras de esta sesion.";
-    elements.sessionWordStatus.classList.toggle("warning", availableWords === 0);
+  const selectedCategories = getImpostorSelectedCategories();
+  const totalWords = countAvailableWordsFor(selectedCategories, new Set());
+  const availableWords = countAvailableWordsFor(selectedCategories, state.usedWordKeys);
+
+  if (totalWords === 0) {
+    elements.sessionWordStatus.textContent = "No hay palabras disponibles.";
+    elements.sessionWordStatus.classList.add("warning");
     return;
   }
 
-  const selectedCategory = state.dictionaryCategories.find((category) => category.id === state.selectedCategoryId);
-  if (!selectedCategory) {
-    elements.sessionWordStatus.textContent = "";
-    elements.sessionWordStatus.classList.remove("warning");
-    return;
-  }
-
-  const availableWords = getAvailableWords(selectedCategory).length;
   elements.sessionWordStatus.textContent =
     availableWords > 0
-      ? `Palabras sin repetir en ${selectedCategory.name}: ${availableWords}.`
-      : `Ya se usaron todas las palabras de ${selectedCategory.name} en esta sesion.`;
+      ? `Palabras sin repetir antes de volver a mezclar: ${availableWords} de ${totalWords}.`
+      : `Ciclo completo. Las ${totalWords} palabras se volveran a mezclar.`;
   elements.sessionWordStatus.classList.toggle("warning", availableWords === 0);
 }
 
@@ -1898,7 +2154,7 @@ function resolveWordSelectionFor(categories, selectedCategoryId, usedWordKeys) {
 }
 
 function resolveRoundSelectionFor(usedWordKeys) {
-  return resolveWordSelectionFor(state.dictionaryCategories, state.selectedCategoryId, usedWordKeys);
+  return resolveWordSelectionFor(getImpostorPlayableCategories(), state.selectedCategoryId, usedWordKeys);
 }
 
 function resolveRoundSelection() {
@@ -1915,7 +2171,29 @@ function resolveFallbackWordSelectionFor(categories, usedWordKeys) {
 }
 
 function resolveFallbackRoundSelection() {
-  return resolveFallbackWordSelectionFor(state.dictionaryCategories, state.usedWordKeys);
+  return resolveFallbackWordSelectionFor(getImpostorPlayableCategories(), state.usedWordKeys);
+}
+
+function getImpostorSelectedCategories() {
+  const playableCategories = getImpostorPlayableCategories();
+  if (state.selectedCategoryId === "aleatorio") {
+    return playableCategories;
+  }
+
+  const selectedCategory = playableCategories.find(
+    (category) => category.id === state.selectedCategoryId
+  );
+  return selectedCategory ? [selectedCategory] : playableCategories;
+}
+
+function resetImpostorWordCycle() {
+  const selectedKeys = new Set();
+  getImpostorSelectedCategories().forEach((category) => {
+    category.words.forEach((word) => selectedKeys.add(normalizeWordKey(word)));
+  });
+
+  selectedKeys.forEach((key) => state.usedWordKeys.delete(key));
+  saveUsedWordsSession();
 }
 
 function resolveMimeSelection(usedWordKeys = state.mimeUsedWordKeys) {
@@ -2003,7 +2281,11 @@ function startGame() {
     return;
   }
 
-  const roundSelection = resolveRoundSelection();
+  let roundSelection = resolveRoundSelection();
+  if (!roundSelection) {
+    resetImpostorWordCycle();
+    roundSelection = resolveRoundSelection();
+  }
   if (!roundSelection) {
     return;
   }
@@ -2272,9 +2554,11 @@ function finishGame(reason) {
 
   stopTimerLoop();
   const impostorName = state.players[game.impostorIndex];
-  elements.endSummary.textContent =
-    `${reason} Categoria: ${game.categoryName}. ` +
-    `La palabra era "${game.secretWord}". Impostor: ${impostorName}.`;
+  elements.endReason.textContent = `${reason} `;
+  elements.endCategory.textContent = game.categoryName;
+  elements.endWord.textContent = `"${game.secretWord}"`;
+  elements.endImpostor.textContent = impostorName;
+  renderImpostorRatingButtons();
   showScreen("end");
 }
 
@@ -2283,6 +2567,19 @@ function prepareNextRound() {
   state.game = null;
   showScreen("setup");
   updateStartAvailability();
+}
+
+function playImpostorAgain() {
+  stopTimerLoop();
+  state.game = null;
+
+  if (!resolveRoundSelectionFor(new Set())) {
+    showScreen("setup");
+    updateStartAvailability();
+    return;
+  }
+
+  startGame();
 }
 
 function randomFrom(items) {

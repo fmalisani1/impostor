@@ -478,6 +478,11 @@ select + .label {
   font-weight: 900;
 }
 
+.end-highlight {
+  color: var(--text);
+  font-weight: 900;
+}
+
 .secret-word {
   margin: 8px auto 0;
   max-width: 320px;

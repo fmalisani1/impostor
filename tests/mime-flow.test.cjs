@@ -224,6 +224,108 @@ test("el ciudadano ve directamente la palabra y solo el impostor ve su rol", () 
   assert.equal(app.elements.get("secret-word").classList.contains("hidden"), true);
 });
 
+test("Impostor no repite palabras y comienza otro ciclo al agotarlas", () => {
+  const app = createApp();
+  app.run(`
+    state.players = ['Ana', 'Beto', 'Cami'];
+    state.dictionaryCategories = parseDictionaryText('[Prueba]\\nUno\\nDos\\nTres');
+    state.selectedCategoryId = 'aleatorio';
+    renderCategorySelect();
+  `);
+
+  const firstCycle = [];
+  for (let round = 0; round < 3; round += 1) {
+    app.run("startGame()");
+    firstCycle.push(app.run("state.game.secretWord"));
+    app.run("prepareNextRound()");
+  }
+  assert.equal(new Set(firstCycle).size, 3);
+
+  app.run("startGame()");
+  const firstWordOfNextCycle = app.run("state.game.secretWord");
+  assert.equal(firstCycle.includes(firstWordOfNextCycle), true);
+  assert.equal(app.run("state.usedWordKeys.size"), 1);
+});
+
+test("Jugar de nuevo inicia otra ronda y Salir vuelve a la configuración", () => {
+  const app = createApp();
+  app.run(`
+    state.players = ['Ana', 'Beto', 'Cami'];
+    state.dictionaryCategories = parseDictionaryText('[Prueba]\\nUno\\nDos\\nTres');
+    startGame();
+  `);
+  const firstWord = app.run("state.game.secretWord");
+
+  app.run("finishGame('Juego terminado.'); playImpostorAgain()");
+  assert.equal(app.elements.get("pass-screen").classList.contains("active"), true);
+  assert.notEqual(app.run("state.game.secretWord"), firstWord);
+  assert.equal(app.run("state.game.revealPosition"), 0);
+
+  app.run("prepareNextRound()");
+  assert.equal(app.run("state.game"), null);
+  assert.equal(app.elements.get("setup-screen").classList.contains("active"), true);
+});
+
+test("el historial de palabras de Impostor sobrevive una recarga de la pestaña", () => {
+  const sessionValues = new Map();
+  const firstApp = createApp(sessionValues);
+  firstApp.run(`
+    state.players = ['Ana', 'Beto', 'Cami'];
+    state.dictionaryCategories = parseDictionaryText('[Prueba]\\nUno\\nDos\\nTres');
+    startGame();
+  `);
+  const firstWord = firstApp.run("state.game.secretWord");
+
+  const secondApp = createApp(sessionValues);
+  secondApp.run(`
+    state.players = ['Ana', 'Beto', 'Cami'];
+    state.dictionaryCategories = parseDictionaryText('[Prueba]\\nUno\\nDos\\nTres');
+    startGame();
+  `);
+  const secondWord = secondApp.run("state.game.secretWord");
+  secondApp.run("prepareNextRound(); startGame()");
+  const thirdWord = secondApp.run("state.game.secretWord");
+
+  assert.notEqual(secondWord, firstWord);
+  assert.notEqual(thirdWord, firstWord);
+  assert.notEqual(thirdWord, secondWord);
+});
+
+test("las valoraciones de Impostor son locales y solo los dislikes salen del mazo", () => {
+  const localValues = new Map();
+  const firstApp = createApp(new Map(), localValues);
+  firstApp.run(`
+    state.players = ['Ana', 'Beto', 'Cami'];
+    state.dictionaryCategories = parseDictionaryText('[Prueba]\\nUno\\nDos\\nTres');
+    state.game = { secretWord: 'Uno', categoryName: 'Prueba', impostorIndex: 0 };
+    finishGame('Juego terminado.');
+    toggleCurrentImpostorRating('dislike');
+  `);
+
+  assert.equal(firstApp.elements.get("end-word").textContent, '"Uno"');
+  assert.equal(firstApp.elements.get("end-impostor").textContent, "Ana");
+  assert.equal(firstApp.run("state.impostorRatings.size"), 1);
+  assert.equal(firstApp.run("countWords(getImpostorPlayableCategories())"), 2);
+  assert.equal(firstApp.elements.get("impostor-disliked-count").textContent, "1");
+  assert.match(firstApp.run("createImpostorDislikesText()"), /Uno/);
+  firstApp.run("toggleImpostorRatingsPanel()");
+  assert.equal(firstApp.elements.get("impostor-ratings-panel").classList.contains("hidden"), false);
+
+  const secondApp = createApp(new Map(), localValues);
+  secondApp.run("state.dictionaryCategories = parseDictionaryText('[Prueba]\\nUno\\nDos\\nTres')");
+  assert.equal(secondApp.run("getImpostorRating('Uno').rating"), "dislike");
+  assert.equal(secondApp.run("getImpostorPlayableCategories()[0].words.includes('Uno')"), false);
+
+  secondApp.run("setImpostorRating('Uno', 'Prueba', null)");
+  assert.equal(secondApp.run("countWords(getImpostorPlayableCategories())"), 3);
+  secondApp.run("setImpostorRating('Dos', 'Prueba', 'like')");
+  assert.equal(secondApp.run("countWords(getImpostorPlayableCategories())"), 3);
+
+  secondApp.run("clearImpostorRatings()");
+  assert.equal(secondApp.run("state.impostorRatings.size"), 0);
+  assert.equal(localValues.has("impostor_word_ratings_v1"), false);
+});
+
 test("cada frase aparece una sola vez antes de comenzar un ciclo nuevo", () => {
   const app = createApp();
   app.run("switchMode('mimica'); startMimeGame()");

@@ -53,6 +53,23 @@
         </div>
         <p id="dictionary-status" class="muted impostor-setting">Cargando palabras...</p>
         <p id="session-word-status" class="muted impostor-setting"></p>
+        <div id="impostor-ratings-tools" class="mime-ratings-tools impostor-setting">
+          <button id="impostor-ratings-toggle" type="button" class="secondary full" aria-expanded="false">
+            Valoraciones de palabras
+          </button>
+          <div id="impostor-ratings-panel" class="mime-ratings-panel hidden">
+            <div class="rating-summary" aria-label="Resumen de valoraciones de Impostor">
+              <span>👍 <strong id="impostor-liked-count">0</strong> likes</span>
+              <span>👎 <strong id="impostor-disliked-count">0</strong> dislikes</span>
+              <span>Sin valorar: <strong id="impostor-unrated-count">0</strong></span>
+            </div>
+            <div class="actions rating-management-actions">
+              <button id="download-impostor-dislikes-button" type="button" class="secondary">Descargar dislikes-impostor.txt</button>
+              <button id="clear-impostor-ratings-button" type="button" class="danger">Borrar valoraciones</button>
+            </div>
+            <div id="impostor-ratings-list" class="mime-ratings-list"></div>
+          </div>
+        </div>
         <p id="mime-word-status" class="muted hidden"></p>
         <div id="mime-ratings-tools" class="mime-ratings-tools hidden">
           <button id="mime-ratings-toggle" type="button" class="secondary full" aria-expanded="false">
@@ -117,8 +134,24 @@
     <section id="end-screen" class="screen">
       <div class="card center">
         <h2>Juego terminado</h2>
-        <p id="end-summary" class="muted"></p>
-        <button id="play-again-button" class="primary">Jugar de nuevo</button>
+        <p id="end-summary" class="muted">
+          <span id="end-reason"></span>
+          Categoria: <span id="end-category"></span>.
+          La palabra era <strong id="end-word" class="end-highlight"></strong>.
+          Impostor: <strong id="end-impostor" class="end-highlight"></strong>.
+        </p>
+        <div class="mime-rating-controls">
+          <p class="muted">¿Qué te pareció esta palabra?</p>
+          <div class="rating-actions" role="group" aria-label="Valorar palabra">
+            <button id="impostor-like-button" type="button" class="rating-button like" aria-pressed="false">👍 Me gusta</button>
+            <button id="impostor-dislike-button" type="button" class="rating-button dislike" aria-pressed="false">👎 No me gusta</button>
+          </div>
+          <p id="impostor-rating-feedback" class="muted rating-feedback" aria-live="polite"></p>
+        </div>
+        <div class="actions">
+          <button id="play-again-button" class="primary">Jugar de nuevo</button>
+          <button id="exit-impostor-button" class="secondary">Salir</button>
+        </div>
       </div>
     </section>
 

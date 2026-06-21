@@ -11,6 +11,8 @@ Juego local para compartir un solo celular, con modos Impostor y Digalo con mimi
 3. Pasa el celular para que cada jugador revele su rol.
 4. Juega hasta que termine el temporizador.
 
+Las palabras no se repiten durante la sesion. Cuando se completa el conjunto elegido, se mezcla nuevamente y comienza otro ciclo. Al terminar cada partida se puede marcar la palabra con like o dislike: los likes siguen participando normalmente y los dislikes quedan excluidos localmente. El panel `Valoraciones` permite restaurarlas, borrarlas o descargar `dislikes-impostor.txt`.
+
 ### Digalo con mimica
 
 1. Elige una categoria de frases o `Aleatorio`.
